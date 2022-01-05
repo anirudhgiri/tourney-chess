@@ -1,8 +1,8 @@
 const express = require("express");
-const router = express.Router();
+const tournamentsRouter = express.Router();
 
-router.get("/", (req, res) => {
+tournamentsRouter.get("/", (req, res) => {
 	res.render("tournaments",{tourneyPage: true, title:"Tournaments - TourneyChess"});
 });
 
-module.exports = router;
+module.exports = tournamentsRouter;

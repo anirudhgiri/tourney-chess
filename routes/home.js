@@ -1,8 +1,8 @@
 const express = require("express");
-const router = express.Router();
+const homeRouter = express.Router();
 
-router.get("/", (req, res)=> {
+homeRouter.get("/", (req, res)=> {
 	res.render("home", {homePage: true, title: "TourneyChess - Free Online Chess Tournament Manager" });
 });
 
-module.exports = router;
+module.exports = homeRouter;
