@@ -20,7 +20,7 @@ const apiRouter = require("./routes/api/api");
 
 //logging middleware
 const logger = require("morgan");
-app.use(logger("common"));
+app.use(logger(process.env.NODE_ENV == "development" ? "dev" : "combined"));
 
 //template engine configuration
 const hbs = require("express-handlebars");
@@ -75,4 +75,4 @@ app.on("ready", () => {
 	app.listen(process.env.PORT, ()=>{
 		console.log(`Listening on port ${process.env.PORT}...`);
 	});
-})
+});
