@@ -1,102 +1,102 @@
 main{
-    display: grid;
-    height: 100vh;
-    grid-template-areas:
-    "topbar topbar"
-    "sidenav content";
+	display: grid;
+	height: 100vh;
+	grid-template-areas:
+	"topbar topbar"
+	"sidenav content";
 
-    grid-template-columns: 175px auto;
-    grid-template-rows: 30px auto;
-  }
+	grid-template-columns: 175px auto;
+	grid-template-rows: 30px auto;
+}
 
-  body{
+body{
     margin: 0;
     font-family: 'Open Sans', Arial, Helvetica, sans-serif;
-  }
+}
 
-  div{
+div{
     margin: 0;
     padding: 10px;
-  }
+}
 
-  h1{
+h1{
     font-family: Poppins, sans-serif;
-  }
+}
 
-  .topbar{
+.topbar{
     grid-area: topbar;
     background-color: rgb(212, 212, 212);
     border-bottom-width: 1px !important;
     border-bottom-style: solid;
     border-bottom-color: rgb(170, 170, 170);
     padding:0;
-  }
+}
 
-  .content{
+.content{
     grid-area: content;
     padding-right: 100px;
-  }
+}
 
-  .sidenav{
+.sidenav{
     grid-area: sidenav;
     margin: 0;
     padding: 0;
     border-right: 1px solid rgb(170, 170, 170);
-  }
+}
 
 
-  .bg-light-grey{
+.bg-light-grey{
     background-color: rgb(218, 218, 218);
-  }
+}
 
-  i{
-    font-size: 20px;
-  }
+i{
+	font-size: 20px;
+}
 
-  .navbar-brand{
-    margin: 0 0 25px 0;
-    padding: 0;
-    align-self: center;
-    font-size: 25px;
-  }
+.navbar-brand{
+	margin: 0 0 25px 0;
+	padding: 0;
+	align-self: center;
+	font-size: 25px;
+}
 
-  .sidenav-link{
-    text-decoration: none;
-    color: black;
-    width: 100%;
-  }
+.sidenav-link{
+	text-decoration: none;
+	color: black;
+	width: 100%;
+}
 
-  .sidenav-row{
-    width: 100%;
-    height: 30px;
-    margin-bottom: 3px;
-    list-style-type: none;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-  }
+.sidenav-row{
+	width: 100%;
+	height: 30px;
+	margin-bottom: 3px;
+	list-style-type: none;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+}
 
-  .sidenav-link:hover{
-    color: black;
-  }
+.sidenav-link:hover{
+	color: black;
+}
 
-  .sidenav-row:hover{
-    cursor: pointer;
-    background-color: rgb(190, 190, 190);
-  }
+.sidenav-row:hover{
+	cursor: pointer;
+	background-color: rgb(190, 190, 190);
+}
 
-  .sidenav-list-icon{
-    flex: 30%;
-    display: grid;
-    place-items: center;
-  }
+.sidenav-list-icon{
+	flex: 30%;
+	display: grid;
+	place-items: center;
+}
 
-  .sidenav-list-title{
-    flex: 70%;
-    padding: 0;
-  }
+.sidenav-list-title{
+	flex: 70%;
+	padding: 0;
+}
 
-  .nav-active{
-    background-color: rgb(190, 190, 190);
-  }
+.nav-active{
+	background-color: rgb(190, 190, 190);
+}
