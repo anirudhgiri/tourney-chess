@@ -42,7 +42,7 @@ app.use((req,res) => {
 });
 
 //catch all other errors
-app.use(function(err, req, res, next) {
+app.use(function(err, req, res, _next) {
 	res.status(err.status || 500);
 	res.render("error", {
 		status: err.errorStatus,
@@ -50,7 +50,6 @@ app.use(function(err, req, res, next) {
 		error: process.env.NODE_ENV == "development"? err : {},
 		layout: false
 	});
-	next();
 });
 
 app.listen(process.env.PORT, ()=>{
