@@ -6,12 +6,28 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.static("public"));
 app.use(express.json());
 
-//import middleware for working with cookies
-const cookieParser = require("cookie-parser");
-app.use(cookieParser());
-
 //load environment variables from the .env file
 require("dotenv").config();
+
+//protecting the api from spam requests
+const slowDown = require("express-slow-down");
+const speedLimiter = slowDown({
+	windowMs: 5 * 60 * 1000,
+	delayAfter: 150,
+	delayMs: 500,
+	maxDelayMs: 10000,
+	headers: true
+});
+app.use(speedLimiter);
+
+const rateLimit = require("express-rate-limit");
+const limiter = rateLimit({
+	windowMs: 5 * 60 * 1000,
+	max: 500,
+	standardHeaders: true,
+	legacyHeaders: false,
+});
+app.use(limiter);
 
 //importing routes
 const homeRouter = require("./routes/home");
@@ -64,7 +80,12 @@ pg.sequelize
 	.authenticate()
 	.then(() => {
 		console.log("Postgres connection has been established successfully.");
-		app.emit("ready");
+		const mongoose = require("./models/mongoose");
+		mongoose.connection.on("error", console.error.bind(console, "MongoDB connection error:"));
+		mongoose.connection.once("open", () => {
+			console.log("MongoDB connection has been established successfully.");
+			app.emit("ready");
+		});
 	})
 	.catch(err => {
 		console.error("Unable to connect to the database:", err);
