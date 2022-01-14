@@ -4,7 +4,8 @@
   "description": "Chess Tournament Manager",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js",
+    "start": "node .",
+    "start:dev": "nodemon .",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint \"**/*.js\" --ignore-pattern node_modules/",
     "lint:fix": "npm run lint -- --fix"
@@ -12,10 +13,13 @@
   "author": "Anirudh Giri",
   "license": "NCSA",
   "dependencies": {
-    "cookie-parser": "^1.4.6",
     "dotenv": "^10.0.0",
     "express": "^4.17.2",
     "express-handlebars": "^6.0.2",
+    "express-rate-limit": "^6.1.0",
+    "express-session": "^1.17.2",
+    "express-slow-down": "^1.4.0",
+    "mongoose": "^6.1.6",
     "morgan": "^1.10.0",
     "pg": "^8.7.1",
     "pg-hstore": "^2.3.4",
