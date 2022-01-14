@@ -30,11 +30,17 @@ h1{
     border-bottom-style: solid;
     border-bottom-color: rgb(170, 170, 170);
     padding:0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
 }
 
 .content{
     grid-area: content;
-    padding-right: 100px;
+	display: flex;
+	flex-direction: column;
+	padding: 0px;
 }
 
 .sidenav{
@@ -99,4 +105,30 @@ i{
 
 .nav-active{
 	background-color: rgb(190, 190, 190);
+}
+
+.footer{
+	background: rgb(0, 0, 0);
+	color: white;
+	margin: 0;
+	width: 100%;
+	padding: 0;
+	font-size: 14px;
+	margin-top: auto;
+}
+
+.footer-left{
+	display: flex;
+	justify-content: center;
+	align-content: center;
+	flex-direction: column;
+	padding: 10px 20px 10px 20px;
+}
+
+.footer-right{
+	display: flex;
+	justify-content: center;
+	align-content: center;
+	flex-direction: column;
+	padding: 10px 20px 10px 20px;
 }
