@@ -3,10 +3,10 @@ const apiRouter = express.Router();
 
 const signupRouter = require("./signup");
 const loginRouter = require("./login");
-const tournamentsRouter = require("../../src/routes/tournaments");
+const tournamentRouter = require("./tournaments");
 
 apiRouter.use("/signup", signupRouter);
 apiRouter.use("/login", loginRouter);
-apiRouter.use("/tournaments", tournamentsRouter)
+apiRouter.use("/tournaments", tournamentRouter);
 
 module.exports = apiRouter;
