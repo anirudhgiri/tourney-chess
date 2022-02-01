@@ -20,4 +20,9 @@ signupRouter.post("/", async (req, res)=> {
 	}
 });
 
+signupRouter.get("/", (req,res) => {
+	res.render("signup", {layout: "plain", title: "Tourney Chess - SignUp", loginPage: true});
+});
+
+
 module.exports = signupRouter;
