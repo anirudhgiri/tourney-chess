@@ -1,0 +1,26 @@
+body{
+	width: 100vw;
+	height: 100vh;
+	margin: 0;
+	display: flex;
+	align-items: center;
+	font-family: 'Open Sans', Arial, Helvetica, sans-serif;
+}
+
+.login-container{
+	margin-top: -150px;
+}
+
+.login-form{
+	padding:10px;
+	border-radius: 10px;
+}
+
+.login-heading{
+	font-size: 30px;
+	font-family: Poppins, sans-serif;
+}
+
+.required-asterisk{
+	color: red;
+}
