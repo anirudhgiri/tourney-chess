@@ -1,30 +1,32 @@
-const {DataTypes} = require("sequelize");
-const { sequelize } = require("./postgres");
+const mongoose = require("mongoose");
 
-const userSchema = {
+const userSchema = new mongoose.Schema({
 	username: {
-		type: DataTypes.STRING,
-		allowNull: false
+		type: String,
+		required: true
 	},
 
 	email: {
-		type: DataTypes.STRING,
-		allowNull: false
+		type: String,
+		required: true
 	},
 
 	passwordHash: {
-		type: DataTypes.STRING,
-		allowNull: false
+		type: String,
+		required: true
 	},
 
 	passwordSalt: {
-		type: DataTypes.STRING,
-		allowNull: false
+		type: String,
+		required: true
+	},
+
+	joinDate: {
+		type: Date,
+		required: true
 	}
-};
+});
 
-
-const User = sequelize.define("users", userSchema);
-sequelize.sync();
+const User = mongoose.model("User", userSchema);
 
 module.exports = User;

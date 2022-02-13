@@ -9,37 +9,13 @@ app.use(express.json());
 //load environment variables from the .env file
 require("dotenv").config();
 
-const https = require("https");
-const fs = require("fs");
-const path = require("path");
-
-const key = fs.readFileSync(path.join(__dirname,process.env.SSL_KEY_FILENAME));
-const cert = fs.readFileSync(path.join(__dirname,process.env.SSL_CERT_FILENAME));
-const options = {key,cert};
-
 //protecting the api from spam requests
-const slowDown = require("express-slow-down");
-const redisStore = require("rate-limit-redis");
-const speedLimiter = slowDown({
-	store: new redisStore({
-		expiry: 5*60,
-		prefix: "sl:",
-		redisURL: process.env.REDIS_CONNECTION_URI
-	}),
-	windowMs: 5 * 60 * 1000,
-	delayAfter: 150,
-	delayMs: 500,
-	maxDelayMs: 10000,
-	headers: true
-});
-app.use(speedLimiter);
-
 const rateLimit = require("express-rate-limit");
+const mongoStore_rl = require("rate-limit-mongo");
 const limiter = rateLimit({
-	store: new redisStore({
-		expiry: 5*60,
-		prefix: "rl:",
-		redisURL: process.env.REDIS_CONNECTION_URI
+	store: new mongoStore_rl({
+		uri: process.env.MONGODB_CONNECTION_URI,
+		expireTimeMs: 5 * 60 * 1000
 	}),
 	windowMs: 5 * 60 * 1000,
 	max: 500,
@@ -50,16 +26,14 @@ app.use(limiter);
 
 //session handling
 const session = require("express-session");
-const redisClient = require("./models/redis");
-
-let RedisStore = require("connect-redis")(session);
+const mongoStore_session = require("connect-mongo");
 app.use(session({
 	secret: process.env.SECRET_KEY,
 	cookie: {
 		maxAge: 30*60*1000,
-		secure: false,
+		secure: true,
 	},
-	store: new RedisStore({client: redisClient}),
+	store: mongoStore_session.create({mongoUrl: process.env.MONGODB_CONNECTION_URI}),
 	saveUninitialized: false,
 	resave: false
 }));
@@ -111,21 +85,20 @@ app.use(function(err, req, res, _next) {
 	});
 });
 
-const pg = require("./models/postgres");
-pg.sequelize
-	.authenticate()
-	.then(() => {
-		console.log("Postgres connection has been established successfully.");
-		const mongoose = require("./models/mongoose");
-		mongoose.connection.on("error", console.error.bind(console, "MongoDB connection error:"));
-		mongoose.connection.once("open", () => {
-			console.log("MongoDB connection has been established successfully.");
-			app.emit("ready");
-		});
-	})
-	.catch(err => {
-		console.error("Unable to connect to the database:", err);
-	});
+const mongoose = require("./models/mongoose");
+mongoose.connection.on("error", console.error.bind(console, "MongoDB connection error:"));
+mongoose.connection.once("open", () => {
+	console.log("MongoDB connection has been established successfully.");
+	app.emit("ready");
+});
+
+const https = require("https");
+const fs = require("fs");
+const path = require("path");
+
+const key = fs.readFileSync(path.join(__dirname,process.env.SSL_KEY_FILENAME));
+const cert = fs.readFileSync(path.join(__dirname,process.env.SSL_CERT_FILENAME));
+const options = {key,cert};
 
 const server = https.createServer(options, app);
 //listen on port when ready
