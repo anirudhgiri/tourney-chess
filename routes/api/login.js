@@ -13,6 +13,7 @@ loginRouter.post("/", async (req, res)=> {
 		const calcHash = crypto.pbkdf2Sync(req.body.password, userlookup.passwordSalt, 100000, 64, "sha512").toString("hex");
 		if(calcHash == userlookup.passwordHash){
 			req.session.username = req.body.username;
+			req.session.userId = userlookup.id;
 			res.status(200).json({success:true, message: "Successfully logged in!"});
 		}
 
