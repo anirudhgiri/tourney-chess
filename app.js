@@ -65,7 +65,6 @@ app.use(session({
 }));
 
 //importing routes
-const homeRouter = require("./routes/dashboard/home");
 const tournamentsRouter = require("./routes/dashboard/tournaments");
 const apiRouter = require("./routes/api/api");
 const dashboardRouter = require("./routes/dashboard/dashboard");
