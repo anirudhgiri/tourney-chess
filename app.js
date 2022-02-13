@@ -86,9 +86,9 @@ app.set("view engine", "hbs");
 
 //routing
 app.use("/dashboard", dashboardRouter);
-app.use("/", homeRouter);
 app.use("/tournaments", tournamentsRouter);
 app.use("/api", apiRouter);
+app.use("/", (req,res) => {res.redirect("/dashboard/home");});
 
 //catch error 404
 app.use((req,res) => {
