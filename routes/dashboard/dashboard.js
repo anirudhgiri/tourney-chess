@@ -3,7 +3,6 @@ const dashboardRouter =  express.Router();
 const homeRouter = require("./home");
 const tournamentRouter = require("./tournaments");
 dashboardRouter.get("*", (req,res,next) => {
-	console.log(req.sesssion);
 	if(req.session.username)
 		next();
 	else

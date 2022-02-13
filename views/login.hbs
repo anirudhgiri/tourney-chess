@@ -1,7 +1,7 @@
 <div class="container login-container">
 	<div class="row login-row">
 		<p class="col-4 offset-4 login-heading">Login to TourneyChess</p>
-		<form class="col-3 offset-4 mt-2 shadow-lg login-form">
+		<form class="col-3 offset-4 mt-2 shadow-lg login-form" id="loginForm">
 			<div class="form-group">
 				<label for="tc_username">Username</label>
 				<input class="form-control" type="text" id="tc_username" placeholder="Enter Username" required>
@@ -14,7 +14,43 @@
 			</div>
 
 			<button type="submit" class="btn btn-primary mt-3 mb-3 form-control" id="loginSubmitButton">Submit</button>
-			<script src="/js/submitLoginForm.js"></script>
+			<script>
+				document.getElementById("loginForm").addEventListener("submit", async event => {
+					event.preventDefault();
+
+					const submitButton =  document.getElementById("loginSubmitButton");
+					const usernameField = document.getElementById("tc_username");
+					const passwordField = document.getElementById("password");
+
+					submitButton.innerHTML = "<span class=\"spinner-border spinner-border-sm\" role=\"status\" aria-hidden=\"true\"></span> Logging In...";
+					submitButton.disabled = true;
+					usernameField.disabled = true;
+					passwordField.disabled = true;
+
+					const username = usernameField.value;
+					const password = passwordField.value;
+
+					const credentials = {username, password};
+					const options = {
+						method: "POST",
+						headers: {
+							"Content-Type": "application/json"
+						},
+						body: JSON.stringify(credentials)
+					};
+
+					let response = await fetch("/api/login", options);
+					if(response.status == 200)
+						window.location.href= "/dashboard/home";
+					else{
+						submitButton.innerHTML = "Submit";
+						submitButton.disabled = false;
+						usernameField.disabled = false;
+						passwordField.disabled = false;
+					}
+
+				});
+			</script>
 			<i class="las la-user-plus"></i><a href="/api/signup" class="text-decoration-none"><small>Don't have an account? Sign Up</small></a>
 		</form>
 	</div>
