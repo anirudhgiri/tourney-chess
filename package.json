@@ -23,6 +23,8 @@
     "ioredis": "^4.28.3",
     "mongoose": "^6.1.6",
     "morgan": "^1.10.0",
+    "pg": "^8.7.1",
+    "pg-hstore": "^2.3.4",
     "rate-limit-redis": "^2.1.0",
     "sequelize": "^6.12.5"
   },
