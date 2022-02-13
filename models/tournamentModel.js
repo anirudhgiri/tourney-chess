@@ -10,7 +10,7 @@ const tournamentSchema = new Schema({
 	tournamentPlayers: {type: [playerSchema], default: []}
 });
 
-const tournamentModel = model(tournamentSchema);
+const tournamentModel = model("Tournament",tournamentSchema);
 
 module.exports = {
 	tournamentModel

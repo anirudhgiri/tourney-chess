@@ -18,7 +18,7 @@ const playerSchema = new Schema({
 	playerAvoidList: {type: [playerSchema], default: []}
 });
 
-const playerModel = model(playerSchema);
+const playerModel = model("Player",playerSchema);
 
 module.exports = {
 	playerSchema,

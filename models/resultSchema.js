@@ -6,7 +6,7 @@ const resultSchema = new Schema({
 	playerResult: {type: Number, required: true}
 });
 
-const resultModel = model(resultSchema);
+const resultModel = model("Result",resultSchema);
 
 module.exports = {
 	resultSchema,
