@@ -14,8 +14,8 @@ signupRouter.post("/", async (req, res)=> {
 		const passwordSalt = crypto.randomBytes(32).toString("hex");
 		const passwordHash = crypto.pbkdf2Sync(req.body.password,passwordSalt,100000,64,"sha512").toString("hex");
 		const joinDate = Date.now();
-		const newUser = new User({username: req.body.username, email: req.body.email, passwordHash, passwordSalt, joinDate});
-		await newUser.save();
+		let newUser = new User({username: req.body.username, email: req.body.email, passwordHash, passwordSalt, joinDate});
+		newUser.save();
 		res.status(200).json({success:true, message:"successfully signed up!"});
 	}
 });
