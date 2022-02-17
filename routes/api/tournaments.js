@@ -56,7 +56,7 @@ tournamentRouter.post("/", async (req, res) => {
 
 	let user = await User.findOne({id:req.session.userId});
 	user.tournaments.push(tournament.id);
-	user.save();
+	await user.save();
 
 	res.json({success:true, message: tournament});
 });
@@ -79,8 +79,8 @@ tournamentRouter.post("/:id/players", async (req,res) => {
 				...req.body.players[i],
 			};
 			tournament.players.push(doc);
-			tournament.save();
 		}
+		await tournament.save();
 		res.json({success:true, message: tournament});
 	}
 
