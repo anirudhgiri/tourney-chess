@@ -1,5 +1,5 @@
 const {Schema, model} = require("mongoose");
-const {nanoid} = require("nanoid/non-secure");
+const {nanoid} = require("nanoid");
 
 function validateEmail(email) {
 	// eslint-disable-next-line no-useless-escape
@@ -8,7 +8,7 @@ function validateEmail(email) {
 }
 
 const userSchema = new Schema({
-	id: {type: String, default: ()=> nanoid(6)},
+	_id: {type: String, default: ()=> nanoid(12)},
 	username: {type: String, required: true, maxlength: 20},
 	email: {type: String, required: true, validate: [validateEmail, "Invalid email address format"], maxlength:320},
 	passwordHash: {type: String, required: true},

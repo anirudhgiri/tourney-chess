@@ -4,7 +4,7 @@ const {nanoid} = require("nanoid");
 const { roundSchema } = require("./roundModel");
 
 const tournamentSchema = new Schema({
-	id: {type: String, default: ()=> nanoid(6)},
+	_id: {type: String, default: ()=> nanoid(12)},
 	createdOn: {type:Date, default: ()=> Date.now()},
 	owner: {type: String, required: true},
 	name: {type: String, required: true, maxlength: 30},
