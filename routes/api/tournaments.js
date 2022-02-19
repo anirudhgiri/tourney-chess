@@ -4,17 +4,15 @@ const {tournamentModel} = require("../../models/tournamentModel");
 const User = require("../../models/userModel");
 
 tournamentRouter.get("/:id", async(req,res) => {
-	const tournament = await tournamentModel.findOne({id: req.params.id});
+	const tournament = await tournamentModel.findOne({id: req.params.id, isPublic: true});
 	if(!tournament)
 		res.status(404).json({
 			success:false,
 			message: `Tournament with tournamentId '${req.params.id}' not found`
 		});
 
-	else if(req.session.username == tournament.owner)
-		res.json({success:true, message: tournament});
 	else
-		res.status(403).json({success:false, message: "You are not the owner of this tournament"});
+		res.json({success:true, message: tournament});
 });
 
 tournamentRouter.all("*", (req,res,next)=> {
@@ -29,15 +27,15 @@ tournamentRouter.get("/", async (req,res) => {
 	res.json({success:true, message: tournaments});
 });
 
-tournamentRouter.get("/:userId/:id", async(req,res) => {
-	const tournament = await tournamentModel.findOne({id: req.params.id, owner:req.params.userId});
+tournamentRouter.get("/:privateId", async(req,res) => {
+	const tournament = await tournamentModel.findOne({privateId: req.params.privateId});
 	if(!tournament)
 		res.status(404).json({
 			success:false,
-			message: `Tournament with tournamentId '${req.params.id}' of user '${req.params.userId}' not found`
+			message: `Tournament with tournamentId '${req.params.privateId}' of user '${req.session.userId}' not found`
 		});
 
-	else if(req.session.username == tournament.owner)
+	else if(req.session.userId == tournament.owner)
 		res.json({success:true, message: tournament});
 	else
 		res.status(403).json({success:false, message: "You are not the owner of this tournament"});
@@ -52,20 +50,19 @@ tournamentRouter.post("/", async (req, res) => {
 	let tournament =  new tournamentModel(document);
 	let saveTournament = tournament.save();
 
-	let user = await User.findOne({id:req.session.userId});
-	user.tournaments.push(tournament.id);
+	let user = await User.findOneAndUpdate({id:req.session.userId},{$push:{tournaments: tournament.privateId}});
 	let saveUser = user.save();
 
 	await Promise.all([saveTournament, saveUser]);
 	res.json({success:true, message: tournament});
 });
 
-tournamentRouter.post("/:id/players", async (req,res) => {
-	const tournament = await tournamentModel.findOne({_id: req.params.id});
+tournamentRouter.post("/:privateId/players", async (req,res) => {
+	const tournament = await tournamentModel.findOne({privateId: req.params.privateId});
 	if(!tournament)
 		res.status(404).json({
 			success:false,
-			message: `Tournament with tournamentId '${req.params.id}' not found`
+			message: `Tournament with tournamentId '${req.params.privateId}' not found`
 		});
 
 	else if(req.session.userId !== tournament.owner)
@@ -81,6 +78,64 @@ tournamentRouter.post("/:id/players", async (req,res) => {
 		res.json({success:true, message: tournament});
 	}
 
+});
+
+tournamentRouter.put("/:privateId/makePublic", async (req,res) => {
+	const tournament = await tournamentModel.findOne({id: req.params.privateId});
+	if(!tournament)
+		res.status(404).json({
+			success:false,
+			message: `Tournament with tournamentId '${req.params.privateId}' of user '${req.params.userId}' not found`
+		});
+
+	else if(tournament.isPublic)
+		res.status(400).json({success:false, message: "Tournament is already public"});
+
+	else if(req.session.userId == tournament.owner){
+		tournamentModel.findOneAndUpdate({id: req.params.privateId},{isPublic: true}).exec();
+		res.status(200).json({success:true, message: "Tournament successfully made public!"});
+	}
+
+	else
+		res.status(403).json({success:false, message: "You are not the owner of this tournament"});
+});
+
+tournamentRouter.put("/:privateId/makePrivate", async (req,res) => {
+	const tournament = await tournamentModel.findOne({id: req.params.privateId});
+	if(!tournament)
+		res.status(404).json({
+			success:false,
+			message: `Tournament with tournamentId '${req.params.privateId}' of user '${req.params.userId}' not found`
+		});
+
+	else if(!tournament.isPublic)
+		res.status(400).json({success:false, message: "Tournament is already private"});
+
+	else if(req.session.userId == tournament.owner){
+		tournamentModel.findOneAndUpdate({id: req.params.privateId},{isPublic: false}).exec();
+		res.status(200).json({success:true, message: "Tournament successfully made private!"});
+	}
+
+	else
+		res.status(403).json({success:false, message: "You are not the owner of this tournament"});
+});
+
+tournamentRouter.delete("/:privateId", async (req,res) => {
+	const tournament = await tournamentModel.findOne({id: req.params.privateId, owner:req.session.userId});
+	if(!tournament)
+		res.status(404).json({
+			success:false,
+			message: `Tournament with tournamentId '${req.params.privateId}' of user '${req.params.userId}' not found`
+		});
+
+	else if(req.session.userId == tournament.owner){
+		tournamentModel.deleteOne({privateId: req.params.privateId, owner:req.params.userId}).exec();
+		User.findOneAndUpdate({id: req.params.userId},{$pull: {tournaments: req.params.privateId}}).exec();
+		res.status(200).json({success:true, message: "Tournament deleted successfully"});
+	}
+
+	else
+		res.status(403).json({success:false, message: "You are not the owner of this tournament"});
 });
 
 module.exports = tournamentRouter;
