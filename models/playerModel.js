@@ -1,9 +1,9 @@
-const { Schema, model } = require("mongoose");
+const { Schema } = require("mongoose");
 const { resultSchema } = require("./resultModel");
 const {nanoid} = require("nanoid/non-secure");
 
 const playerSchema = new Schema({
-	id: {type: String, default: ()=> nanoid(4)},
+	_id: {type: String, default: ()=> nanoid(4)},
 	firstName: {type: String, required: true, maxlength: 20},
 	lastName: {type: String, required: true, maxlength: 20},
 	federation: {type: String, default: null},
