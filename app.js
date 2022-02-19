@@ -30,12 +30,13 @@ const mongoStore_session = require("connect-mongo");
 app.use(session({
 	secret: process.env.SECRET_KEY,
 	cookie: {
-		maxAge: 5*60*60*1000,
+		maxAge:5*60*60*1000,
 		secure: true,
 	},
 	store: mongoStore_session.create({mongoUrl: process.env.MONGODB_CONNECTION_URI}),
 	saveUninitialized: false,
-	resave: false
+	resave: false,
+	rolling: true
 }));
 
 //importing routes
